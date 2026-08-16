@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hotel Price Watch</title>
+  <meta name="description" content="Hotel Price Watch is an independent travel technology project that monitors selected hotel rates for specific dates and helps travelers notice meaningful price changes.">
+  <style>
+    :root{--bg:#f6f8fb;--card:#fff;--ink:#18202a;--muted:#5e6a78;--accent:#246bfd;--line:#e2e7ef;--ok:#0b7a53}*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}a{color:var(--accent)}.wrap{max-width:1040px;margin:auto;padding:0 24px}.top{padding:22px 0;border-bottom:1px solid var(--line);background:rgba(255,255,255,.86)}nav{display:flex;justify-content:space-between;align-items:center;gap:24px}.brand{font-weight:800;letter-spacing:-.02em}.navlinks{display:flex;gap:18px;font-size:14px}.navlinks a{text-decoration:none;color:var(--muted)}.hero{padding:84px 0 64px}.eyebrow{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--accent)}h1{font-size:clamp(42px,7vw,76px);line-height:1.02;letter-spacing:-.055em;margin:12px 0 24px;max-width:900px}.lead{font-size:20px;color:var(--muted);max-width:760px}.badge{display:inline-block;margin-top:22px;padding:8px 12px;border:1px solid #b8d7c9;border-radius:999px;background:#effaf5;color:var(--ok);font-size:13px;font-weight:700}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:18px 0 70px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}.card h2{margin:0 0 10px;font-size:20px}.card p{margin:0;color:var(--muted)}section{padding:44px 0;border-top:1px solid var(--line)}section h2{font-size:30px;letter-spacing:-.03em;margin:0 0 12px}.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.step strong{display:block;margin-bottom:5px}.num{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eaf0ff;color:var(--accent);font-weight:800;margin-bottom:12px}.note{background:#fff9e8;border:1px solid #f0df9e;border-radius:16px;padding:20px;margin-top:22px;color:#63531b}.footer{padding:34px 0 50px;color:var(--muted);font-size:14px}.footerline{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}@media(max-width:760px){.grid,.steps{grid-template-columns:1fr}.navlinks{display:none}.hero{padding-top:58px}h1{font-size:48px}}
+  </style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <nav>
+      <div class="brand">Hotel Price Watch</div>
+      <div class="navlinks"><a href="#how">How it works</a><a href="#about">About</a><a href="privacy.html">Privacy</a></div>
+    </nav>
+  </div>
+</header>
+<main>
+  <div class="wrap hero">
+    <div class="eyebrow">Independent travel technology project</div>
+    <h1>Track selected hotel prices without repeatedly searching by hand.</h1>
+    <p class="lead">Hotel Price Watch is a pilot service for monitoring specific hotels, stay dates and booking conditions. It records comparable offers over time and can alert a traveler when a meaningful price opportunity appears.</p>
+    <span class="badge">Pilot in development</span>
+  </div>
+
+  <div class="wrap grid">
+    <article class="card"><h2>Focused monitoring</h2><p>Travelers choose the exact hotels, dates, occupancy and conditions they care about rather than searching an entire destination.</p></article>
+    <article class="card"><h2>Comparable rates</h2><p>The system is designed to compare like-for-like offers, including meal plan, cancellation policy and total stay price.</p></article>
+    <article class="card"><h2>Provider checkout</h2><p>Hotel Price Watch does not take bookings or payments. When an eligible provider integration returns an offer, the traveler is directed to the provider to review and complete the booking.</p></article>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <div class="steps">
+        <div class="step"><div class="num">1</div><strong>Select a stay</strong><span>Define hotels, check-in and check-out dates, room count and guest count.</span></div>
+        <div class="step"><div class="num">2</div><strong>Apply booking criteria</strong><span>For example, require breakfast and free cancellation so price changes are meaningful.</span></div>
+        <div class="step"><div class="num">3</div><strong>Watch for opportunities</strong><span>Store price history and notify the traveler when a configured threshold or meaningful drop is detected.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="wrap">
+      <h2>About the project</h2>
+      <p>Hotel Price Watch is a small independent software project being developed to reduce repetitive hotel-price checking for travelers. The current pilot is designed for a limited set of selected properties and dates, with a technical architecture that can support additional hotels through configuration rather than custom code.</p>
+      <p>Where an official travel-provider API is available and approved for use, the project is intended to use that API for availability, rates and provider landing links. The project does not scrape provider websites as its intended production integration method.</p>
+      <div class="note"><strong>Independence notice:</strong> Hotel Price Watch is not currently affiliated with, endorsed by, or operated by Agoda. Any future Agoda integration would only be enabled after official partner approval and according to Agoda's applicable API and affiliate terms.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Contact</h2>
+      <p>Project owner: <a href="https://github.com/gambit807" rel="noopener">gambit807 on GitHub</a></p>
+    </div>
+  </section>
+</main>
+<footer class="footer"><div class="wrap footerline"><span>© 2026 Hotel Price Watch</span><span><a href="privacy.html">Privacy</a></span></div></footer>
+</body>
+</html>
