@@ -6,19 +6,41 @@
 <title>חאניה העתיקה · מסלול GPS</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-*{box-sizing:border-box}html,body{margin:0;width:100%;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f6f7f9;color:#111827;direction:ltr}.top{direction:rtl;text-align:right;background:#fff;padding:12px 14px;border-bottom:1px solid #e5e7eb}.top h1{font-size:20px;margin:0 0 4px}.top p{font-size:13px;color:#667085;margin:0;line-height:1.4}#map{width:100%;height:64svh;min-height:500px;position:relative;direction:ltr!important;text-align:left!important;background:#dfe6ed}.leaflet-container,.leaflet-pane,.leaflet-map-pane,.leaflet-tile-pane{direction:ltr!important}.leaflet-container{unicode-bidi:isolate}.bar{direction:rtl;text-align:right;display:flex;gap:8px;flex-wrap:wrap;background:#fff;padding:10px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.bar button{appearance:none;min-height:44px;padding:10px 12px;border-radius:12px;border:1px solid #d0d5dd;background:#fff;font-size:14px;font-weight:800;flex:1 1 44%}.bar .primary{background:#111827;color:#fff;border-color:#111827}.status{flex:1 1 100%;font-size:12.5px;color:#667085;line-height:1.45}.direction{flex:1 1 100%;border-radius:12px;padding:9px 11px;font-size:14px;font-weight:900;text-align:center;display:none}.direction.good{display:block;background:#e9f7ef;color:#137333;border:1px solid #a8dab5}.direction.warn{display:block;background:#fff7e0;color:#8a5a00;border:1px solid #efd083}.direction.bad{display:block;background:#fdecec;color:#b3261e;border:1px solid #efb5b1}.direction.wait{display:block;background:#eef2f7;color:#475467;border:1px solid #d0d5dd}.legend{direction:rtl;text-align:right;margin:10px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;font-size:12px;line-height:1.55}.pin{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0004;direction:ltr}.start{background:#188038}.shop{background:#d93025}.stop{background:#0a84ff}.gps{width:22px;height:22px;border-radius:50%;background:#7c3aed;border:4px solid #fff;box-shadow:0 0 0 3px #7c3aed55,0 2px 8px #0004}.seg{background:#fff;border:1px solid #9fcbff;border-radius:7px;padding:2px 5px;color:#075a9d;font-weight:900;font-size:11px;white-space:nowrap;direction:ltr}.poi{direction:rtl;text-align:right}.poi b{display:block}.poi span{font-size:12px;color:#667085}.shop-label{direction:ltr;background:#fff;border:2px solid #d93025;border-radius:10px;padding:4px 7px;color:#a61b12;font-size:12px;font-weight:900;white-space:nowrap;box-shadow:0 2px 8px #0003}.leaflet-tooltip.shop-tip{background:transparent;border:none;box-shadow:none;padding:0}.leaflet-tooltip.shop-tip:before{display:none}.route-key{font-weight:800;color:#075a9d}.beam-key{font-weight:800;color:#6339a3}
+*{box-sizing:border-box}html,body{margin:0;width:100%;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f6f7f9;color:#111827;direction:ltr}
+.top{direction:rtl;text-align:right;background:#fff;padding:12px 14px;border-bottom:1px solid #e5e7eb}.top h1{font-size:20px;margin:0 0 4px}.top p{font-size:13px;color:#667085;margin:0;line-height:1.4}
+.mapwrap{position:relative;width:100%}#map{width:100%;height:64svh;min-height:500px;position:relative;direction:ltr!important;text-align:left!important;background:#dfe6ed}
+.leaflet-container,.leaflet-pane,.leaflet-map-pane,.leaflet-tile-pane{direction:ltr!important}.leaflet-container{unicode-bidi:isolate}
+.bar{direction:rtl;text-align:right;display:flex;gap:8px;flex-wrap:wrap;background:#fff;padding:10px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}
+.bar button{appearance:none;min-height:44px;padding:10px 12px;border-radius:12px;border:1px solid #d0d5dd;background:#fff;font-size:14px;font-weight:800;flex:1 1 30%}
+.bar .primary{background:#111827;color:#fff;border-color:#111827}.status{flex:1 1 100%;font-size:12.5px;color:#667085;line-height:1.45}
+.direction{flex:1 1 100%;border-radius:12px;padding:9px 11px;font-size:14px;font-weight:900;text-align:center;display:none}
+.direction.good{display:block;background:#e9f7ef;color:#137333;border:1px solid #a8dab5}.direction.warn{display:block;background:#fff7e0;color:#8a5a00;border:1px solid #efd083}
+.direction.bad{display:block;background:#fdecec;color:#b3261e;border:1px solid #efb5b1}.direction.wait{display:block;background:#eef2f7;color:#475467;border:1px solid #d0d5dd}
+.legend{direction:rtl;text-align:right;margin:10px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;font-size:12px;line-height:1.55}
+.pin{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0004;direction:ltr}
+.start{background:#188038}.shop{background:#d93025}.stop{background:#0a84ff}.gps{width:22px;height:22px;border-radius:50%;background:#7c3aed;border:4px solid #fff;box-shadow:0 0 0 3px #7c3aed55,0 2px 8px #0004}
+.seg{background:#fff;border:1px solid #9fcbff;border-radius:7px;padding:2px 5px;color:#075a9d;font-weight:900;font-size:11px;white-space:nowrap;direction:ltr}
+.poi{direction:rtl;text-align:right}.poi b{display:block}.poi span{font-size:12px;color:#667085}
+.shop-label{direction:ltr;background:#fff;border:2px solid #d93025;border-radius:10px;padding:4px 7px;color:#a61b12;font-size:12px;font-weight:900;white-space:nowrap;box-shadow:0 2px 8px #0003}
+.leaflet-tooltip.shop-tip{background:transparent;border:none;box-shadow:none;padding:0}.leaflet-tooltip.shop-tip:before{display:none}
+.route-key{font-weight:800;color:#075a9d}.beam-key{font-weight:800;color:#6339a3}
+#offmap{position:absolute;z-index:1000;display:none;transform:translate(-50%,-50%);border:0;background:transparent;padding:0;min-height:0;min-width:0;pointer-events:auto}
+.offbubble{display:flex;align-items:center;gap:5px;background:#fff;border:2px solid #7c3aed;color:#5b21b6;border-radius:999px;padding:5px 8px 5px 6px;box-shadow:0 3px 10px #0004;font:800 12px -apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;direction:rtl;white-space:nowrap}
+.offarrow{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#7c3aed;color:#fff;font-size:16px;line-height:1;transform-origin:center}
+@media(max-width:520px){.bar button{flex:1 1 44%}}
 </style>
 </head>
 <body>
 <div class="top"><h1>חאניה העתיקה: המסלול הרגלי A→J</h1><p>כולל VOTANI, The Grocery Store והרחובות היפים. הקו הכחול הוא המסלול המומלץ להליכה.</p></div>
-<div id="map"></div>
+<div class="mapwrap"><div id="map"></div><button id="offmap" type="button" aria-label="הצג את המיקום שלי"><span class="offbubble"><span id="offarrow" class="offarrow">↑</span><span id="offtext">המיקום שלך</span></span></button></div>
 <div class="bar">
 <button id="gps" class="primary">📍 הפעל GPS + מצפן</button>
-<button id="route">🗺️ הצג את כל המסלול</button>
+<button id="me">🟣 הצג אותי</button>
+<button id="route">🗺️ הצג את המסלול</button>
 <div id="dir" class="direction wait">הפעל GPS + מצפן כדי לראות אלומת כיוון.</div>
 <div id="status" class="status">המפה והמסלול נטענים…</div>
 </div>
-<div class="legend">🟢 A תחנת השאטל · 🔴 <b>C VOTANI 🛍️</b> · 🔴 <b>I The Grocery Store 🛍️</b> · 🔵 תחנות הסיור · 🟣 המיקום שלך.<br><span class="route-key">לך לאורך הקו הכחול העבה בין התחנות.</span><br><span class="beam-key">אלומת הכיוון יוצאת מהנקודה הסגולה לפי הכיוון שאליו החלק העליון של האייפון פונה:</span> 🟢 ירוק = בכיוון המסלול, 🟠 כתום = סטייה, 🔴 אדום = כיוון הפוך.</div>
+<div class="legend">🟢 A תחנת השאטל · 🔴 <b>C VOTANI 🛍️</b> · 🔴 <b>I The Grocery Store 🛍️</b> · 🔵 תחנות הסיור · 🟣 המיקום שלך.<br><span class="route-key">לך לאורך הקו הכחול העבה בין התחנות.</span><br><span class="beam-key">כשאתה ליד המסלול, אלומת הכיוון יוצאת מהנקודה הסגולה:</span> 🟢 ירוק = בכיוון המסלול, 🟠 כתום = סטייה, 🔴 אדום = כיוון הפוך. אם אתה רחוק, חץ סגול בשולי המפה מראה לאיזה כיוון נמצא ה-GPS שלך.</div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (()=>{
@@ -38,17 +60,19 @@ const map=L.map('map',{zoomControl:true,preferCanvas:true});
 const refresh=()=>{try{map.invalidateSize({pan:false})}catch(e){}};
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors',detectRetina:true}).addTo(map);
 const icon=(id,k)=>L.divIcon({className:'',html:`<div class="pin ${k}">${id}</div>`,iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-18]});
-const markers={};
-stops.forEach(s=>{const m=L.marker([s.lat,s.lng],{icon:icon(s.id,s.k)}).addTo(map).bindPopup(`<div class="poi"><b>${s.id} · ${s.name}</b><span>${s.note}</span></div>`);markers[s.id]=m;if(s.id==='C'||s.id==='I'){const label=s.id==='C'?'C · VOTANI 🛍️':'I · Grocery Store 🛍️';m.bindTooltip(`<div class="shop-label">${label}</div>`,{permanent:true,direction:s.id==='C'?'right':'left',offset:s.id==='C'?[12,0]:[-12,0],className:'shop-tip',opacity:1})}});
-let halo=L.polyline(scenic,{color:'#ffffff',weight:12,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map);
+stops.forEach(s=>{const m=L.marker([s.lat,s.lng],{icon:icon(s.id,s.k)}).addTo(map).bindPopup(`<div class="poi"><b>${s.id} · ${s.name}</b><span>${s.note}</span></div>`);if(s.id==='C'||s.id==='I'){const label=s.id==='C'?'C · VOTANI 🛍️':'I · Grocery Store 🛍️';m.bindTooltip(`<div class="shop-label">${label}</div>`,{permanent:true,direction:s.id==='C'?'right':'left',offset:s.id==='C'?[12,0]:[-12,0],className:'shop-tip',opacity:1})}});
+let halo=L.polyline(scenic,{color:'#fff',weight:12,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map);
 let line=L.polyline(scenic,{color:'#0a84ff',weight:8,opacity:1,lineCap:'round',lineJoin:'round'}).addTo(map),bounds=line.getBounds();
 for(let i=0;i<stops.length-1;i++){const a=stops[i],b=stops[i+1],mid=[(a.lat+b.lat)/2,(a.lng+b.lng)/2];L.marker(mid,{interactive:false,icon:L.divIcon({className:'',html:`<div class="seg">${a.id}→${b.id}</div>`,iconAnchor:[18,9]})}).addTo(map)}
-function fit(){refresh();map.fitBounds(bounds.pad(.16),{animate:false})}
-fit();setTimeout(fit,100);setTimeout(fit,450);setTimeout(fit,1100);window.addEventListener('resize',()=>setTimeout(fit,100));window.addEventListener('orientationchange',()=>setTimeout(fit,350));
-const status=document.getElementById('status'),dir=document.getElementById('dir');status.textContent='המסלול מוצג. C ו-I הן שתי חנויות הקנייה.';
-async function refine(){try{const coords=scenic.map(p=>`${p[1]},${p[0]}`).join(';');const u=`https://routing.openstreetmap.de/routed-foot/route/v1/driving/${coords}?overview=full&geometries=geojson`;const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.routes?.length)throw 0;const ll=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);map.removeLayer(line);map.removeLayer(halo);halo=L.polyline(ll,{color:'#ffffff',weight:12,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map);line=L.polyline(ll,{color:'#0a84ff',weight:8,opacity:1,lineCap:'round',lineJoin:'round'}).addTo(map);bounds=line.getBounds();fit();status.textContent=`המסלול הרגלי נטען · כ-${(d.routes[0].distance/1000).toFixed(1)} ק״מ · עקוב אחרי הקו הכחול.`}catch(e){status.textContent='מוצג המסלול המתוכנן דרך הרחובות המומלצים. עקוב אחרי הקו הכחול.'}}
+let userView=false;
+function fit(){userView=false;refresh();map.fitBounds(bounds.pad(.16),{animate:false});setTimeout(updateOffmap,50)}
+fit();setTimeout(fit,100);setTimeout(fit,450);setTimeout(fit,1100);
+window.addEventListener('resize',()=>setTimeout(()=>{refresh();updateOffmap()},100));window.addEventListener('orientationchange',()=>setTimeout(()=>{refresh();updateOffmap()},350));map.on('move zoom resize',updateOffmap);
+const status=document.getElementById('status'),dir=document.getElementById('dir'),offmap=document.getElementById('offmap'),offarrow=document.getElementById('offarrow'),offtext=document.getElementById('offtext');
+status.textContent='המסלול מוצג. C ו-I הן שתי חנויות הקנייה.';
+async function refine(){try{const coords=scenic.map(p=>`${p[1]},${p[0]}`).join(';');const u=`https://routing.openstreetmap.de/routed-foot/route/v1/driving/${coords}?overview=full&geometries=geojson`;const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.routes?.length)throw 0;const ll=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);map.removeLayer(line);map.removeLayer(halo);halo=L.polyline(ll,{color:'#fff',weight:12,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map);line=L.polyline(ll,{color:'#0a84ff',weight:8,opacity:1,lineCap:'round',lineJoin:'round'}).addTo(map);bounds=line.getBounds();if(!userView)fit();status.textContent=`המסלול הרגלי נטען · כ-${(d.routes[0].distance/1000).toFixed(1)} ק״מ · עקוב אחרי הקו הכחול.`}catch(e){status.textContent='מוצג המסלול המתוכנן דרך הרחובות המומלצים. עקוב אחרי הקו הכחול.'}}
 refine();
-let gm=null,ac=null,watch=null,beam=null,beamOutline=null,lastPos=null,compassHeading=null,gpsHeading=null,orientationReady=false;
+let gm=null,ac=null,watch=null,beam=null,beamOutline=null,lastPos=null,compassHeading=null,gpsHeading=null,nearRoute=false;
 const gicon=()=>L.divIcon({className:'',html:'<div class="gps"></div>',iconSize:[22,22],iconAnchor:[11,11]});
 function dist(a,b,c,d){const R=6371000,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,A=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(A))}
 function bearing(a,b,c,d){const r=Math.PI/180,p1=a*r,p2=c*r,dl=(d-b)*r;const y=Math.sin(dl)*Math.cos(p2),x=Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl);return(Math.atan2(y,x)/r+360)%360}
@@ -57,14 +81,53 @@ function dest(lat,lng,brg,meters){const R=6371000,r=Math.PI/180,d=meters/R,t=brg
 function nearestScenic(lat,lng){let best={i:0,d:Infinity};scenic.forEach((p,i)=>{const x=dist(lat,lng,p[0],p[1]);if(x<best.d)best={i,d:x}});return best}
 function routeBearing(lat,lng){const n=nearestScenic(lat,lng);let i=Math.min(n.i+2,scenic.length-1);if(i===n.i&&i>0)i=n.i-1;return bearing(lat,lng,scenic[i][0],scenic[i][1])}
 function headingNow(){return Number.isFinite(compassHeading)?compassHeading:(Number.isFinite(gpsHeading)?gpsHeading:null)}
-function beamStyle(diff){if(diff<=55)return{fill:'#188038',cls:'good',text:'✓ כיוון טוב - המשך לאורך הקו הכחול'};if(diff<=100)return{fill:'#f59e0b',cls:'warn',text:'↗ סטייה מהמסלול - סובב מעט לכיוון הקו הכחול'};return{fill:'#d93025',cls:'bad',text:'↩ כיוון הפוך - הסתובב לכיוון ההמשך A→J'}}
-function drawBeam(){if(!lastPos)return;const h=headingNow();if(!Number.isFinite(h)){dir.className='direction wait';dir.textContent='ה-GPS פעיל. ממתין לנתוני מצפן או לכיוון תנועה.';return}const lat=lastPos.lat,lng=lastPos.lng,target=routeBearing(lat,lng),df=angleDiff(h,target),s=beamStyle(df),left=dest(lat,lng,h-23,65),mid=dest(lat,lng,h,78),right=dest(lat,lng,h+23,65),shape=[[lat,lng],left,mid,right];if(beam)map.removeLayer(beam);if(beamOutline)map.removeLayer(beamOutline);beamOutline=L.polygon(shape,{color:'#ffffff',weight:5,opacity:.8,fillOpacity:0,interactive:false}).addTo(map);beam=L.polygon(shape,{color:s.fill,weight:1,opacity:.8,fillColor:s.fill,fillOpacity:.28,interactive:false}).addTo(map);beam.bringToBack();line.bringToFront();dir.className='direction '+s.cls;dir.textContent=s.text+' · סטייה '+Math.round(df)+'°'}
-function pos(p){const lat=p.coords.latitude,lng=p.coords.longitude,acc=p.coords.accuracy||0;lastPos={lat,lng};gpsHeading=Number.isFinite(p.coords.heading)?p.coords.heading:null;if(!gm){gm=L.marker([lat,lng],{icon:gicon(),zIndexOffset:1000}).addTo(map);ac=L.circle([lat,lng],{radius:acc,color:'#7c3aed',weight:1,fillColor:'#7c3aed',fillOpacity:.1}).addTo(map)}else{gm.setLatLng([lat,lng]);ac.setLatLng([lat,lng]).setRadius(acc)}let n=null;stops.forEach(s=>{const d=dist(lat,lng,s.lat,s.lng);if(!n||d<n.d)n={s,d}});const near=n.d<300;if(near)map.panTo([lat,lng]);else fit();status.textContent=near?`GPS פעיל · דיוק כ-${Math.round(acc)} מ׳ · קרוב ל-${n.s.id}, כ-${Math.round(n.d)} מ׳`:`GPS פעיל · אתה כ-${Math.round(n.d)} מ׳ מהתחנה ${n.s.id}. המפה נשארת ממוקדת במסלול עד שתתקרב.`;document.getElementById('gps').textContent='📍 GPS + מצפן פעילים';drawBeam()}
+function beamStyle(diff){if(diff<=55)return{fill:'#188038',cls:'good',text:'✓ כיוון טוב · המשך לאורך הקו הכחול'};if(diff<=100)return{fill:'#f59e0b',cls:'warn',text:'↗ סטייה מהמסלול · סובב מעט לכיוון הקו הכחול'};return{fill:'#d93025',cls:'bad',text:'↩ כיוון הפוך · הסתובב לכיוון ההמשך A→J'}}
+function drawBeam(){
+ if(!lastPos||!nearRoute){if(beam)beam.setStyle({opacity:0,fillOpacity:0});if(beamOutline)beamOutline.setStyle({opacity:0});return}
+ const h=headingNow();if(!Number.isFinite(h)){dir.className='direction wait';dir.textContent='GPS פעיל · ממתין לנתוני מצפן';return}
+ const rb=routeBearing(lastPos.lat,lastPos.lng),df=angleDiff(h,rb),sty=beamStyle(df),L=85,w=24;
+ const p1=dest(lastPos.lat,lastPos.lng,h-w,L*.92),p2=dest(lastPos.lat,lastPos.lng,h,L*1.25),p3=dest(lastPos.lat,lastPos.lng,h+w,L*.92),poly=[[lastPos.lat,lastPos.lng],p1,p2,p3];
+ if(!beamOutline)beamOutline=L.polygon(poly,{color:'#fff',weight:7,fill:false,opacity:.95,interactive:false}).addTo(map);else{beamOutline.setLatLngs(poly).setStyle({opacity:.95})}
+ if(!beam)beam=L.polygon(poly,{color:sty.fill,weight:2,fillColor:sty.fill,fillOpacity:.28,opacity:.9,interactive:false}).addTo(map);else{beam.setLatLngs(poly).setStyle({color:sty.fill,fillColor:sty.fill,fillOpacity:.28,opacity:.9})}
+ dir.className='direction '+sty.cls;dir.textContent=sty.text;
+}
+function setHeading(h){if(Number.isFinite(h)){compassHeading=(h+360)%360;drawBeam()}}
+function onOrientation(e){if(Number.isFinite(e.webkitCompassHeading))setHeading(e.webkitCompassHeading);else if(Number.isFinite(e.alpha))setHeading(360-e.alpha)}
+async function startCompass(){
+ try{
+   if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){
+     const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){dir.className='direction wait';dir.textContent='המצפן לא אושר. ה-GPS עדיין פעיל.';return}
+   }
+   window.removeEventListener('deviceorientationabsolute',onOrientation,true);window.removeEventListener('deviceorientation',onOrientation,true);
+   window.addEventListener('deviceorientationabsolute',onOrientation,true);window.addEventListener('deviceorientation',onOrientation,true);
+ }catch(e){dir.className='direction wait';dir.textContent='לא ניתן להפעיל מצפן כרגע. ה-GPS עדיין פעיל.'}
+}
+function showMe(){if(!lastPos){status.textContent='הפעל קודם GPS כדי להציג את מיקומך.';return}userView=true;map.setView([lastPos.lat,lastPos.lng],17,{animate:true});offmap.style.display='none';status.textContent='מציג את מיקומך. לחץ "הצג את המסלול" כדי לחזור למסלול A→J.'}
+function updateOffmap(){
+ if(!lastPos){offmap.style.display='none';return}
+ const pt=map.latLngToContainerPoint([lastPos.lat,lastPos.lng]),sz=map.getSize(),m=54;
+ const inside=pt.x>=12&&pt.x<=sz.x-12&&pt.y>=12&&pt.y<=sz.y-12;
+ if(inside||userView||nearRoute){offmap.style.display='none';return}
+ const cx=sz.x/2,cy=sz.y/2,dx=pt.x-cx,dy=pt.y-cy;
+ const sx=dx===0?Infinity:(sz.x/2-m)/Math.abs(dx),sy=dy===0?Infinity:(sz.y/2-m)/Math.abs(dy),sc=Math.min(sx,sy);
+ const x=cx+dx*sc,y=cy+dy*sc;
+ offmap.style.left=x+'px';offmap.style.top=y+'px';offmap.style.display='block';
+ const c=map.getCenter(),br=bearing(c.lat,c.lng,lastPos.lat,lastPos.lng),km=dist(c.lat,c.lng,lastPos.lat,lastPos.lng);
+ offarrow.style.transform=`rotate(${br}deg)`;offtext.textContent=km>=1000?`${(km/1000).toFixed(1)} ק״מ`:`${Math.round(km)} מ׳`;
+}
+function pos(p){
+ const lat=p.coords.latitude,lng=p.coords.longitude,acc=p.coords.accuracy||0;lastPos={lat,lng};gpsHeading=Number.isFinite(p.coords.heading)?p.coords.heading:null;
+ if(!gm){gm=L.marker([lat,lng],{icon:gicon(),zIndexOffset:1000}).addTo(map);ac=L.circle([lat,lng],{radius:acc,color:'#7c3aed',weight:1,fillColor:'#7c3aed',fillOpacity:.1}).addTo(map)}
+ else{gm.setLatLng([lat,lng]);ac.setLatLng([lat,lng]).setRadius(acc)}
+ const n=nearestScenic(lat,lng);nearRoute=n.d<300;
+ if(nearRoute&&!userView){userView=true;map.setView([lat,lng],18,{animate:true})}
+ else if(userView)map.panTo([lat,lng],{animate:true});
+ status.textContent=nearRoute?`GPS פעיל · דיוק כ-${Math.round(acc)} מ׳ · אתה כ-${Math.round(n.d)} מ׳ מהקו הכחול`:`GPS פעיל · אתה כ-${Math.round(n.d)} מ׳ מהמסלול. החץ הסגול בשולי המפה מצביע אליך.`;
+ document.getElementById('gps').textContent='📍 GPS פעיל';drawBeam();updateOffmap()
+}
 function err(e){status.textContent=e.code===1?'יש לאשר ל-Safari גישה למיקום.':'לא הצלחתי לקבל מיקום GPS כרגע.'}
-function orientationHandler(e){let h=null;if(Number.isFinite(e.webkitCompassHeading))h=e.webkitCompassHeading;else if(Number.isFinite(e.alpha))h=(360-e.alpha)%360;if(Number.isFinite(h)){compassHeading=h;drawBeam()}}
-async function enableOrientation(){try{if(typeof DeviceOrientationEvent!=='undefined'&&typeof DeviceOrientationEvent.requestPermission==='function'){const res=await DeviceOrientationEvent.requestPermission();if(res==='granted'){window.addEventListener('deviceorientation',orientationHandler,true);orientationReady=true;return true}return false}else if('DeviceOrientationEvent' in window){window.addEventListener('deviceorientation',orientationHandler,true);orientationReady=true;return true}}catch(e){}return false}
-document.getElementById('gps').addEventListener('click',async()=>{const ori=orientationReady?true:await enableOrientation();if(!navigator.geolocation){status.textContent='GPS אינו זמין בדפדפן הזה.';return}if(watch!==null)navigator.geolocation.clearWatch(watch);status.textContent=ori?'GPS ומצפן מופעלים. החזק את החלק העליון של האייפון לכיוון ההליכה.':'GPS מופעל. המצפן לא אושר, ולכן האלומה תשתמש בכיוון התנועה כאשר תהיה בתנועה.';watch=navigator.geolocation.watchPosition(pos,err,{enableHighAccuracy:true,maximumAge:1000,timeout:15000})});
-document.getElementById('route').addEventListener('click',fit);
+document.getElementById('gps').addEventListener('click',async()=>{await startCompass();if(!navigator.geolocation){status.textContent='GPS אינו זמין בדפדפן הזה.';return}if(watch!==null)navigator.geolocation.clearWatch(watch);status.textContent='מבקש הרשאת מיקום…';watch=navigator.geolocation.watchPosition(pos,err,{enableHighAccuracy:true,maximumAge:2000,timeout:15000})});
+document.getElementById('me').addEventListener('click',showMe);document.getElementById('route').addEventListener('click',fit);offmap.addEventListener('click',showMe);
 })();
 </script>
 </body>
