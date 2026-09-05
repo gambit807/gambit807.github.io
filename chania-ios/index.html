@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="he">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>חאניה העתיקה · מסלול GPS</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:#f6f7f9;color:#111827;direction:ltr}.top{direction:rtl;text-align:right;background:#fff;padding:12px 14px;border-bottom:1px solid #e5e7eb}.top h1{font-size:20px;margin:0 0 4px}.top p{font-size:13px;color:#667085;margin:0;line-height:1.4}#map{width:100%;height:64svh;min-height:500px;position:relative;direction:ltr!important;text-align:left!important;background:#dfe6ed}.leaflet-container,.leaflet-pane,.leaflet-map-pane,.leaflet-tile-pane{direction:ltr!important}.leaflet-container{unicode-bidi:isolate}.bar{direction:rtl;text-align:right;display:flex;gap:8px;flex-wrap:wrap;background:#fff;padding:10px;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.bar button{appearance:none;min-height:44px;padding:10px 12px;border-radius:12px;border:1px solid #d0d5dd;background:#fff;font-size:14px;font-weight:800;flex:1 1 44%}.bar .primary{background:#111827;color:#fff;border-color:#111827}.status{flex:1 1 100%;font-size:12.5px;color:#667085;line-height:1.45}.legend{direction:rtl;text-align:right;margin:10px;background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:10px 12px;font-size:12px;line-height:1.5}.pin{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:900;border:3px solid #fff;box-shadow:0 2px 8px #0004;direction:ltr}.start{background:#188038}.shop{background:#d93025}.stop{background:#0a84ff}.gps{width:22px;height:22px;border-radius:50%;background:#7c3aed;border:4px solid #fff;box-shadow:0 0 0 3px #7c3aed55,0 2px 8px #0004}.seg{background:#fff;border:1px solid #b8d8ff;border-radius:7px;padding:2px 5px;color:#075a9d;font-weight:900;font-size:11px;white-space:nowrap;direction:ltr}.poi{direction:rtl;text-align:right}.poi b{display:block}.poi span{font-size:12px;color:#667085}
+</style>
+</head>
+<body>
+<div class="top"><h1>חאניה העתיקה: המסלול הרגלי A→J</h1><p>כולל VOTANI, The Grocery Store והרחובות היפים. המפה מותאמת במיוחד ל-Safari באייפון.</p></div>
+<div id="map"></div>
+<div class="bar">
+<button id="gps" class="primary">📍 הצג את המיקום שלי</button>
+<button id="route">🗺️ הצג את כל המסלול</button>
+<div id="status" class="status">המפה והמסלול נטענים…</div>
+</div>
+<div class="legend">🟢 A תחנת השאטל · 🔴 C ו-I חנויות · 🔵 תחנות הסיור · 🟣 המיקום שלך. המסלול הכחול עובר דרך נקודות ביניים שנבחרו כדי לשמור על הרחובות המומלצים.</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+(()=>{
+const stops=[
+{id:'A',name:'תחנת השאטל / National Bank',note:'Tzanakaki 1',lat:35.51395,lng:24.01975,k:'start'},
+{id:'B',name:'Chatzimichali Daliani',note:'רחוב מומלץ',lat:35.51543,lng:24.02048,k:'stop'},
+{id:'C',name:'VOTANI',note:'Daskalogianni 46',lat:35.51586,lng:24.02042,k:'shop'},
+{id:'D',name:'Splantzia Square',note:'כיכר Splantzia',lat:35.5163844,lng:24.0200951,k:'stop'},
+{id:'E',name:'Halidon / Trimartiri',note:'רחוב Halidon',lat:35.5152164,lng:24.0183771,k:'stop'},
+{id:'F',name:'Portou',note:'סמטאות העיר העתיקה',lat:35.515467,lng:24.016053,k:'stop'},
+{id:'G',name:'Kondylaki / Etz Hayyim',note:'הרובע היהודי',lat:35.515791,lng:24.01669,k:'stop'},
+{id:'H',name:'Skoufon',note:'רחוב מומלץ',lat:35.515922,lng:24.016403,k:'stop'},
+{id:'I',name:'The Grocery Store',note:'Zampeliou 43',lat:35.5164795,lng:24.0167885,k:'shop'},
+{id:'J',name:'Theotokopoulou',note:'Topanas',lat:35.51727,lng:24.01556,k:'stop'}];
+const scenic=[[35.51395,24.01975],[35.51430,24.01990],[35.51478,24.02018],[35.51512,24.02038],[35.51543,24.02048],[35.51586,24.02042],[35.51612,24.02028],[35.5163844,24.0200951],[35.51602,24.01955],[35.51568,24.01908],[35.51538,24.01862],[35.5152164,24.0183771],[35.51517,24.01775],[35.51526,24.01710],[35.515467,24.016053],[35.51563,24.01628],[35.515791,24.01669],[35.515922,24.016403],[35.51622,24.01644],[35.5164795,24.0167885],[35.51678,24.01655],[35.51702,24.01603],[35.51727,24.01556]];
+const map=L.map('map',{zoomControl:true,preferCanvas:true});
+const refresh=()=>{try{map.invalidateSize({pan:false})}catch(e){}};
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors',detectRetina:true}).addTo(map);
+const icon=(id,k)=>L.divIcon({className:'',html:`<div class="pin ${k}">${id}</div>`,iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-18]});
+stops.forEach(s=>L.marker([s.lat,s.lng],{icon:icon(s.id,s.k)}).addTo(map).bindPopup(`<div class="poi"><b>${s.id} · ${s.name}</b><span>${s.note}</span></div>`));
+let line=L.polyline(scenic,{color:'#0a84ff',weight:6,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map),bounds=line.getBounds();
+for(let i=0;i<stops.length-1;i++){const a=stops[i],b=stops[i+1],mid=[(a.lat+b.lat)/2,(a.lng+b.lng)/2];L.marker(mid,{interactive:false,icon:L.divIcon({className:'',html:`<div class="seg">${a.id}→${b.id}</div>`,iconAnchor:[18,9]})}).addTo(map)}
+function fit(){refresh();map.fitBounds(bounds.pad(.12),{animate:false})}
+fit();setTimeout(fit,100);setTimeout(fit,450);setTimeout(fit,1100);window.addEventListener('resize',()=>setTimeout(fit,100));window.addEventListener('orientationchange',()=>setTimeout(fit,350));
+const status=document.getElementById('status');status.textContent='המסלול מוצג. לחץ על GPS כדי להציג את מיקומך.';
+async function refine(){try{const coords=scenic.map(p=>`${p[1]},${p[0]}`).join(';');const u=`https://routing.openstreetmap.de/routed-foot/route/v1/driving/${coords}?overview=full&geometries=geojson`;const r=await fetch(u);if(!r.ok)throw 0;const d=await r.json();if(!d.routes?.length)throw 0;const ll=d.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);map.removeLayer(line);line=L.polyline(ll,{color:'#0a84ff',weight:6,opacity:.95,lineCap:'round',lineJoin:'round'}).addTo(map);bounds=line.getBounds();fit();status.textContent=`המסלול הרגלי נטען · כ-${(d.routes[0].distance/1000).toFixed(1)} ק״מ.`}catch(e){status.textContent='מוצג המסלול המתוכנן דרך הרחובות המומלצים.'}}
+refine();
+let gm=null,ac=null,watch=null;
+const gicon=()=>L.divIcon({className:'',html:'<div class="gps"></div>',iconSize:[22,22],iconAnchor:[11,11]});
+function dist(a,b,c,d){const R=6371000,r=Math.PI/180,x=(c-a)*r,y=(d-b)*r,A=Math.sin(x/2)**2+Math.cos(a*r)*Math.cos(c*r)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(A))}
+function pos(p){const lat=p.coords.latitude,lng=p.coords.longitude,acc=p.coords.accuracy||0;if(!gm){gm=L.marker([lat,lng],{icon:gicon(),zIndexOffset:1000}).addTo(map);ac=L.circle([lat,lng],{radius:acc,color:'#7c3aed',weight:1,fillColor:'#7c3aed',fillOpacity:.1}).addTo(map)}else{gm.setLatLng([lat,lng]);ac.setLatLng([lat,lng]).setRadius(acc)}let n=null;stops.forEach(s=>{const d=dist(lat,lng,s.lat,s.lng);if(!n||d<n.d)n={s,d}});const near=n.d<2500;if(near)map.panTo([lat,lng]);status.textContent=near?`GPS פעיל · דיוק כ-${Math.round(acc)} מ׳ · קרוב ל-${n.s.id}, כ-${Math.round(n.d)} מ׳`:`GPS פעיל · אתה עדיין רחוק מהמסלול. המפה נשארת על חאניה.`;document.getElementById('gps').textContent='📍 GPS פעיל'}
+function err(e){status.textContent=e.code===1?'יש לאשר ל-Safari גישה למיקום.':'לא הצלחתי לקבל מיקום GPS כרגע.'}
+document.getElementById('gps').addEventListener('click',()=>{if(!navigator.geolocation){status.textContent='GPS אינו זמין בדפדפן הזה.';return}if(watch!==null)navigator.geolocation.clearWatch(watch);status.textContent='מבקש הרשאת מיקום…';watch=navigator.geolocation.watchPosition(pos,err,{enableHighAccuracy:true,maximumAge:2000,timeout:15000})});
+document.getElementById('route').addEventListener('click',fit);
+})();
+</script>
+</body>
+</html>
