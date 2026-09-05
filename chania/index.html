@@ -4,56 +4,397 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>חאניה העתיקה - מסלול רגלי עם GPS</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3ynAKHwz6FcH54jTCnqIWdp8uPz1w=" crossorigin="">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIINfQ3ynAKHwz6FcH54jTCnqIWdp8uPz1w=" crossorigin="">
+
 <style>
-:root{--bg:#f6f7f9;--ink:#111827;--muted:#667085;--blue:#0a84ff;--green:#188038;--red:#d93025;--gps:#7c3aed}
-*{box-sizing:border-box}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}
-header{padding:14px 14px 10px;background:#fff;border-bottom:1px solid #e5e7eb}h1{font-size:21px;margin:0 0 5px}header p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
-#map{width:100%;height:68vh;min-height:520px;background:#e9eef3}.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding:10px;background:#fff;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}
-button{appearance:none;border:1px solid #d0d5dd;background:#fff;color:#111827;border-radius:12px;padding:11px 13px;min-height:44px;font-size:15px;font-weight:700}button.primary{background:#111;color:#fff;border-color:#111}
-.status{flex:1 1 100%;font-size:13px;color:var(--muted);line-height:1.4}.wrap{max-width:900px;margin:auto}.card{margin:10px;padding:12px 13px;background:#fff;border:1px solid #e5e7eb;border-radius:14px}
-.legend{display:flex;flex-wrap:wrap;gap:10px 14px;font-size:13px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-left:5px}.dot.start{background:var(--green)}.dot.shop{background:var(--red)}.dot.stop{background:var(--blue)}.dot.gps{background:var(--gps)}
-.small{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}.leaflet-div-icon{background:transparent;border:none}.letter-pin{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:16px;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.28);direction:ltr}
-.pin-start{background:var(--green)}.pin-shop{background:var(--red)}.pin-stop{background:var(--blue)}.gps-pin{width:22px;height:22px;border-radius:50%;background:var(--gps);border:4px solid #fff;box-shadow:0 0 0 3px rgba(124,58,237,.28),0 2px 8px rgba(0,0,0,.28)}
-.route-label{background:#fff;border:1px solid #b8d8ff;color:#075a9d;border-radius:7px;padding:2px 5px;font-weight:800;font-size:11px;box-shadow:0 1px 4px rgba(0,0,0,.14);white-space:nowrap}.poi-name{font-weight:800}.poi-note{font-size:12px;color:#667085;margin-top:3px}@media(max-width:600px){#map{height:66vh;min-height:500px}button{flex:1 1 46%}}
+:root{
+  --bg:#f6f7f9;
+  --card:#fff;
+  --ink:#111827;
+  --muted:#667085;
+  --blue:#0a84ff;
+  --green:#188038;
+  --red:#d93025;
+  --gps:#7c3aed;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+header{
+  padding:14px 14px 10px;
+  background:#fff;
+  border-bottom:1px solid #e5e7eb;
+}
+h1{font-size:21px;margin:0 0 5px}
+header p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+#map{
+  width:100%;
+  height:68vh;
+  min-height:520px;
+  background:#e9eef3;
+}
+.toolbar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  padding:10px;
+  background:#fff;
+  border-top:1px solid #e5e7eb;
+  border-bottom:1px solid #e5e7eb;
+}
+button{
+  appearance:none;
+  border:1px solid #d0d5dd;
+  background:#fff;
+  color:#111827;
+  border-radius:12px;
+  padding:11px 13px;
+  min-height:44px;
+  font-size:15px;
+  font-weight:700;
+}
+button.primary{background:#111;color:#fff;border-color:#111}
+button:disabled{opacity:.5}
+.status{
+  flex:1 1 100%;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.4;
+}
+.wrap{max-width:900px;margin:auto}
+.card{
+  margin:10px;
+  padding:12px 13px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+}
+.legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px 14px;
+  font-size:13px;
+}
+.dot{
+  width:10px;height:10px;border-radius:50%;
+  display:inline-block;margin-left:5px;
+}
+.dot.start{background:var(--green)}
+.dot.shop{background:var(--red)}
+.dot.stop{background:var(--blue)}
+.dot.gps{background:var(--gps)}
+.small{font-size:12px;color:var(--muted);line-height:1.5;margin-top:8px}
+.leaflet-div-icon{
+  background:transparent;
+  border:none;
+}
+.letter-pin{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:900;font-size:16px;
+  border:3px solid #fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.28);
+  direction:ltr;
+}
+.pin-start{background:var(--green)}
+.pin-shop{background:var(--red)}
+.pin-stop{background:var(--blue)}
+.gps-pin{
+  width:22px;height:22px;border-radius:50%;
+  background:var(--gps);
+  border:4px solid #fff;
+  box-shadow:0 0 0 3px rgba(124,58,237,.28),0 2px 8px rgba(0,0,0,.28);
+}
+.route-label{
+  background:#fff;
+  border:1px solid #b8d8ff;
+  color:#075a9d;
+  border-radius:7px;
+  padding:2px 5px;
+  font-weight:800;
+  font-size:11px;
+  box-shadow:0 1px 4px rgba(0,0,0,.14);
+  white-space:nowrap;
+}
+.leaflet-tooltip.route-seg{
+  background:transparent;
+  border:none;
+  box-shadow:none;
+  padding:0;
+}
+.leaflet-tooltip.route-seg:before{display:none}
+.poi-name{font-weight:800}
+.poi-note{font-size:12px;color:#667085;margin-top:3px}
+@media(max-width:600px){
+  #map{height:66vh;min-height:500px}
+  button{flex:1 1 46%}
+}
 </style>
 </head>
 <body>
-<div class="wrap"><header><h1>חאניה העתיקה: המסלול הרגלי המלא</h1><p>מסלול A→J דרך הרחובות היפים, כולל VOTANI ו-The Grocery Store. הנקודה הסגולה היא מיקום ה-GPS שלך.</p></header>
+<div class="wrap">
+<header>
+  <h1>חאניה העתיקה: המסלול הרגלי המלא</h1>
+  <p>מסלול A→J דרך הרחובות היפים, כולל VOTANI ו-The Grocery Store. הנקודה הסגולה היא מיקום ה-GPS שלך.</p>
+</header>
+
 <div id="map"></div>
-<div class="toolbar"><button id="gpsBtn" class="primary" type="button">📍 הצג את המיקום שלי</button><button id="followBtn" type="button">עקוב אחרי המיקום: פעיל</button><button id="routeBtn" type="button">הצג את כל המסלול</button><div id="status" class="status">טוען מפה...</div></div>
-<section class="card"><div class="legend"><span><i class="dot start"></i>A תחנת השאטל</span><span><i class="dot shop"></i>C, I חנויות</span><span><i class="dot stop"></i>תחנות הסיור</span><span><i class="dot gps"></i>המיקום שלך</span></div><div class="small">אשר ל-Safari גישה למיקום. המפה תעדכן את הנקודה הסגולה תוך כדי הליכה.</div></section></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<div class="toolbar">
+  <button id="gpsBtn" class="primary" type="button">📍 הצג את המיקום שלי</button>
+  <button id="followBtn" type="button">עקוב אחרי המיקום: פעיל</button>
+  <button id="routeBtn" type="button">הצג את כל המסלול</button>
+  <div id="status" class="status">טוען מפה ומסלול רגלי...</div>
+</div>
+
+<section class="card">
+  <div class="legend">
+    <span><i class="dot start"></i>A תחנת השאטל</span>
+    <span><i class="dot shop"></i>C, I חנויות</span>
+    <span><i class="dot stop"></i>תחנות הסיור</span>
+    <span><i class="dot gps"></i>המיקום שלך</span>
+  </div>
+  <div class="small">
+    המפה מבקשת הרשאת מיקום מה-iPhone. אחרי האישור היא מעדכנת את הנקודה בזמן ההליכה.
+    אם שירות המסלול המקוון אינו זמין, עדיין יוצג קו המסלול המתוכנן דרך אותן נקודות כפייה.
+  </div>
+</section>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
 <script>
 (function(){
-const statusEl=document.getElementById('status'),gpsBtn=document.getElementById('gpsBtn'),followBtn=document.getElementById('followBtn'),routeBtn=document.getElementById('routeBtn');
-const stops=[
-{id:'A',name:'תחנת השאטל / National Bank',note:'Tzanakaki 1',lat:35.51395,lng:24.01975,kind:'start'},
-{id:'B',name:'Chatzimichali Daliani',note:'רחוב מומלץ',lat:35.51543,lng:24.02048,kind:'stop'},
-{id:'C',name:'VOTANI',note:'Daskalogianni 46',lat:35.51586,lng:24.02042,kind:'shop'},
-{id:'D',name:'Splantzia Square',note:'כיכר Splantzia',lat:35.5163844,lng:24.0200951,kind:'stop'},
-{id:'E',name:'Halidon / Trimartiri',note:'הקתדרלה ברחוב Halidon',lat:35.5152164,lng:24.0183771,kind:'stop'},
-{id:'F',name:'Portou',note:'כניסה לסמטאות המערביות',lat:35.515467,lng:24.016053,kind:'stop'},
-{id:'G',name:'Kondylaki / Etz Hayyim',note:'הרובע היהודי',lat:35.515791,lng:24.016690,kind:'stop'},
-{id:'H',name:'Skoufon',note:'Skoufon 14',lat:35.515922,lng:24.016403,kind:'stop'},
-{id:'I',name:'The Grocery Store',note:'Zampeliou 43',lat:35.5164795,lng:24.0167885,kind:'shop'},
-{id:'J',name:'Theotokopoulou',note:'סיום ב-Topanas',lat:35.51727,lng:24.01556,kind:'stop'}];
-const scenicWaypoints=[[35.51395,24.01975],[35.51430,24.01990],[35.51478,24.02018],[35.51512,24.02038],[35.51543,24.02048],[35.51586,24.02042],[35.51612,24.02028],[35.5163844,24.0200951],[35.51602,24.01955],[35.51568,24.01908],[35.51538,24.01862],[35.5152164,24.0183771],[35.51517,24.01775],[35.51526,24.01710],[35.515467,24.016053],[35.51563,24.01628],[35.515791,24.016690],[35.515922,24.016403],[35.51622,24.01644],[35.5164795,24.0167885],[35.51678,24.01655],[35.51702,24.01603],[35.51727,24.01556]];
-const map=L.map('map',{zoomControl:true}).setView([35.5157,24.0184],16);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);
-function pinIcon(id,kind){const cls=kind==='start'?'pin-start':kind==='shop'?'pin-shop':'pin-stop';return L.divIcon({className:'',html:`<div class="letter-pin ${cls}">${id}</div>`,iconSize:[34,34],iconAnchor:[17,17],popupAnchor:[0,-18]});}
-stops.forEach(s=>{const m=L.marker([s.lat,s.lng],{icon:pinIcon(s.id,s.kind)}).addTo(map);m.bindPopup(`<div class="poi-name">${s.id} · ${s.name}</div><div class="poi-note">${s.note}</div>`);});
-const routeLine=L.polyline(scenicWaypoints,{color:'#0a84ff',weight:6,opacity:.95,lineJoin:'round',lineCap:'round'}).addTo(map);let routeBounds=routeLine.getBounds();map.fitBounds(routeBounds.pad(.13));
-for(let i=0;i<stops.length-1;i++){const a=stops[i],b=stops[i+1],mid=[(a.lat+b.lat)/2,(a.lng+b.lng)/2];L.marker(mid,{interactive:false,icon:L.divIcon({className:'',html:`<div class="route-label">${a.id}→${b.id}</div>`,iconAnchor:[20,10]})}).addTo(map);}
-statusEl.textContent='המפה והמסלול מוכנים. לחץ על GPS כדי להציג את המיקום שלך.';
-let gpsMarker=null,accuracyCircle=null,watchId=null,follow=true;
-function gpsIcon(){return L.divIcon({className:'',html:'<div class="gps-pin"></div>',iconSize:[22,22],iconAnchor:[11,11]});}
-function distanceMeters(aLat,aLng,bLat,bLng){const R=6371000,toRad=x=>x*Math.PI/180,dLat=toRad(bLat-aLat),dLng=toRad(bLng-aLng),la1=toRad(aLat),la2=toRad(bLat);const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
-function nearestStop(lat,lng){let best=null;stops.forEach(s=>{const d=distanceMeters(lat,lng,s.lat,s.lng);if(!best||d<best.d)best={s,d};});return best;}
-function updatePosition(pos){const lat=pos.coords.latitude,lng=pos.coords.longitude,acc=pos.coords.accuracy||0;if(!gpsMarker){gpsMarker=L.marker([lat,lng],{icon:gpsIcon(),zIndexOffset:1000}).addTo(map);accuracyCircle=L.circle([lat,lng],{radius:acc,color:'#7c3aed',weight:1,fillColor:'#7c3aed',fillOpacity:.10}).addTo(map);}else{gpsMarker.setLatLng([lat,lng]);accuracyCircle.setLatLng([lat,lng]).setRadius(acc);}const near=nearestStop(lat,lng),d=Math.round(near.d);gpsMarker.bindPopup(`<div class="poi-name">המיקום שלך</div><div class="poi-note">דיוק GPS: כ-${Math.round(acc)} מ׳<br>הנקודה הקרובה: ${near.s.id}, כ-${d} מ׳</div>`);if(follow)map.panTo([lat,lng],{animate:true});statusEl.textContent=`GPS פעיל · דיוק כ-${Math.round(acc)} מ׳ · הקרובה ביותר: ${near.s.id}, כ-${d} מ׳`;gpsBtn.textContent='📍 GPS פעיל';}
-function gpsError(err){let msg='לא הצלחתי לקבל מיקום GPS.';if(err&&err.code===1)msg='צריך לאשר ל-Safari גישה למיקום.';else if(err&&err.code===2)msg='המיקום אינו זמין כרגע.';else if(err&&err.code===3)msg='בקשת המיקום נמשכה יותר מדי זמן.';statusEl.textContent=msg;gpsBtn.textContent='📍 נסה שוב GPS';}
-function startGPS(){if(!navigator.geolocation){statusEl.textContent='Safari אינו מאפשר GPS בדף זה.';return;}if(watchId!==null)navigator.geolocation.clearWatch(watchId);statusEl.textContent='מבקש מה-iPhone הרשאת מיקום...';watchId=navigator.geolocation.watchPosition(updatePosition,gpsError,{enableHighAccuracy:true,maximumAge:3000,timeout:15000});}
-gpsBtn.addEventListener('click',startGPS);followBtn.addEventListener('click',()=>{follow=!follow;followBtn.textContent=`עקוב אחרי המיקום: ${follow?'פעיל':'כבוי'}`;if(follow&&gpsMarker)map.panTo(gpsMarker.getLatLng(),{animate:true});});routeBtn.addEventListener('click',()=>map.fitBounds(routeBounds.pad(.13),{animate:true}));
+  const statusEl = document.getElementById('status');
+  const gpsBtn = document.getElementById('gpsBtn');
+  const followBtn = document.getElementById('followBtn');
+  const routeBtn = document.getElementById('routeBtn');
+
+  const stops = [
+    {id:'A', name:'תחנת השאטל / National Bank', note:'Tzanakaki 1', lat:35.51395, lng:24.01975, kind:'start'},
+    {id:'B', name:'Chatzimichali Daliani', note:'רחוב מומלץ', lat:35.51543, lng:24.02048, kind:'stop'},
+    {id:'C', name:'VOTANI', note:'Daskalogianni 46', lat:35.51586, lng:24.02042, kind:'shop'},
+    {id:'D', name:'Splantzia Square', note:'כיכר Splantzia', lat:35.5163844, lng:24.0200951, kind:'stop'},
+    {id:'E', name:'Halidon / Trimartiri', note:'הקתדרלה ברחוב Halidon', lat:35.5152164, lng:24.0183771, kind:'stop'},
+    {id:'F', name:'Portou', note:'כניסה לסמטאות המערביות', lat:35.515467, lng:24.016053, kind:'stop'},
+    {id:'G', name:'Kondylaki / Etz Hayyim', note:'הרובע היהודי', lat:35.515791, lng:24.016690, kind:'stop'},
+    {id:'H', name:'Skoufon', note:'Skoufon 14', lat:35.515922, lng:24.016403, kind:'stop'},
+    {id:'I', name:'The Grocery Store', note:'Zampeliou 43', lat:35.5164795, lng:24.0167885, kind:'shop'},
+    {id:'J', name:'Theotokopoulou', note:'סיום ב-Topanas', lat:35.51727, lng:24.01556, kind:'stop'}
+  ];
+
+  const scenicWaypoints = [
+    [35.51395,24.01975],
+    [35.51430,24.01990],
+    [35.51478,24.02018],
+    [35.51512,24.02038],
+    [35.51543,24.02048],
+    [35.51586,24.02042],
+    [35.51612,24.02028],
+    [35.5163844,24.0200951],
+    [35.51602,24.01955],
+    [35.51568,24.01908],
+    [35.51538,24.01862],
+    [35.5152164,24.0183771],
+    [35.51517,24.01775],
+    [35.51526,24.01710],
+    [35.515467,24.016053],
+    [35.51563,24.01628],
+    [35.515791,24.016690],
+    [35.515922,24.016403],
+    [35.51622,24.01644],
+    [35.5164795,24.0167885],
+    [35.51678,24.01655],
+    [35.51702,24.01603],
+    [35.51727,24.01556]
+  ];
+
+  const map = L.map('map', {zoomControl:true}).setView([35.5157,24.0184], 16);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19,
+    attribution:'© OpenStreetMap contributors'
+  }).addTo(map);
+
+  function pinIcon(id, kind){
+    const cls = kind === 'start' ? 'pin-start' : kind === 'shop' ? 'pin-shop' : 'pin-stop';
+    return L.divIcon({
+      className:'',
+      html:`<div class="letter-pin ${cls}">${id}</div>`,
+      iconSize:[34,34],
+      iconAnchor:[17,17],
+      popupAnchor:[0,-18]
+    });
+  }
+
+  stops.forEach(s=>{
+    const m = L.marker([s.lat,s.lng], {icon:pinIcon(s.id,s.kind)}).addTo(map);
+    m.bindPopup(`<div class="poi-name">${s.id} · ${s.name}</div><div class="poi-note">${s.note}</div>`);
+  });
+
+  let routeLine = null;
+  let routeBounds = L.latLngBounds(stops.map(s=>[s.lat,s.lng]));
+  map.fitBounds(routeBounds.pad(0.18));
+
+  for(let i=0;i<stops.length-1;i++){
+    const a = stops[i], b = stops[i+1];
+    const mid = [(a.lat+b.lat)/2,(a.lng+b.lng)/2];
+    L.marker(mid,{
+      interactive:false,
+      icon:L.divIcon({
+        className:'',
+        html:`<div class="route-label">${a.id}→${b.id}</div>`,
+        iconAnchor:[20,10]
+      })
+    }).addTo(map);
+  }
+
+  function drawFallback(){
+    if(routeLine) map.removeLayer(routeLine);
+    routeLine = L.polyline(scenicWaypoints,{
+      color:'#0a84ff',
+      weight:6,
+      opacity:.9,
+      lineJoin:'round',
+      lineCap:'round'
+    }).addTo(map);
+    routeBounds = routeLine.getBounds();
+    statusEl.textContent = 'מוצג המסלול המתוכנן. GPS זמין בלחיצה על "הצג את המיקום שלי".';
+  }
+
+  async function loadWalkingRoute(){
+    const coords = scenicWaypoints.map(p=>`${p[1]},${p[0]}`).join(';');
+    const url = `https://routing.openstreetmap.de/routed-foot/route/v1/driving/${coords}?overview=full&geometries=geojson&steps=false`;
+    try{
+      const r = await fetch(url, {mode:'cors'});
+      if(!r.ok) throw new Error('routing HTTP '+r.status);
+      const data = await r.json();
+      if(!data.routes || !data.routes.length) throw new Error('no route');
+      const latlngs = data.routes[0].geometry.coordinates.map(c=>[c[1],c[0]]);
+      if(routeLine) map.removeLayer(routeLine);
+      routeLine = L.polyline(latlngs,{
+        color:'#0a84ff',
+        weight:6,
+        opacity:.95,
+        lineJoin:'round',
+        lineCap:'round'
+      }).addTo(map);
+      routeBounds = routeLine.getBounds();
+      map.fitBounds(routeBounds.pad(0.12));
+      const km = data.routes[0].distance/1000;
+      statusEl.textContent = `המסלול הרגלי נטען. אורך משוער ${km.toFixed(1)} ק"מ.`;
+    }catch(e){
+      drawFallback();
+    }
+  }
+
+  let gpsMarker = null;
+  let accuracyCircle = null;
+  let watchId = null;
+  let follow = true;
+
+  function gpsIcon(){
+    return L.divIcon({
+      className:'',
+      html:'<div class="gps-pin"></div>',
+      iconSize:[22,22],
+      iconAnchor:[11,11]
+    });
+  }
+
+  function distanceMeters(aLat,aLng,bLat,bLng){
+    const R=6371000, toRad=x=>x*Math.PI/180;
+    const dLat=toRad(bLat-aLat), dLng=toRad(bLng-aLng);
+    const la1=toRad(aLat), la2=toRad(bLat);
+    const h=Math.sin(dLat/2)**2+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)**2;
+    return 2*R*Math.asin(Math.sqrt(h));
+  }
+
+  function nearestStop(lat,lng){
+    let best=null;
+    stops.forEach(s=>{
+      const d=distanceMeters(lat,lng,s.lat,s.lng);
+      if(!best || d<best.d) best={s,d};
+    });
+    return best;
+  }
+
+  function updatePosition(pos){
+    const lat=pos.coords.latitude;
+    const lng=pos.coords.longitude;
+    const acc=pos.coords.accuracy || 0;
+
+    if(!gpsMarker){
+      gpsMarker=L.marker([lat,lng],{icon:gpsIcon(),zIndexOffset:1000}).addTo(map);
+      accuracyCircle=L.circle([lat,lng],{
+        radius:acc,
+        color:'#7c3aed',
+        weight:1,
+        fillColor:'#7c3aed',
+        fillOpacity:.10
+      }).addTo(map);
+    }else{
+      gpsMarker.setLatLng([lat,lng]);
+      accuracyCircle.setLatLng([lat,lng]).setRadius(acc);
+    }
+
+    const near=nearestStop(lat,lng);
+    const d=near ? Math.round(near.d) : null;
+    gpsMarker.bindPopup(`<div class="poi-name">המיקום שלך</div><div class="poi-note">דיוק GPS: כ-${Math.round(acc)} מ׳${near ? `<br>הנקודה הקרובה: ${near.s.id}, כ-${d} מ׳` : ''}</div>`);
+
+    const nearRoute = near && d <= 2500;
+    if(follow && nearRoute) map.panTo([lat,lng], {animate:true});
+    statusEl.textContent = nearRoute
+      ? `GPS פעיל. דיוק כ-${Math.round(acc)} מ׳ · הקרובה ביותר: ${near.s.id}, כ-${d} מ׳`
+      : `GPS פעיל, אבל אתה עדיין רחוק מהמסלול (${near ? Math.round(d/100)/10 + ' ק״מ מהנקודה ' + near.s.id : 'מחוץ לאזור'}). המפה נשארת ממוקדת במסלול בחאניה.`;
+    gpsBtn.textContent='📍 GPS פעיל';
+  }
+
+  function gpsError(err){
+    let msg='לא הצלחתי לקבל מיקום GPS.';
+    if(err && err.code===1) msg='צריך לאשר לדפדפן גישה למיקום כדי להציג את נקודת ה-GPS.';
+    else if(err && err.code===2) msg='המיקום אינו זמין כרגע.';
+    else if(err && err.code===3) msg='בקשת המיקום נמשכה יותר מדי זמן.';
+    statusEl.textContent=msg;
+    gpsBtn.textContent='📍 נסה שוב GPS';
+  }
+
+  function startGPS(){
+    if(!navigator.geolocation){
+      statusEl.textContent='הדפדפן הזה אינו מאפשר GPS בדף זה.';
+      return;
+    }
+    if(watchId!==null) navigator.geolocation.clearWatch(watchId);
+    statusEl.textContent='מבקש מה-iPhone הרשאת מיקום...';
+    watchId=navigator.geolocation.watchPosition(
+      updatePosition,
+      gpsError,
+      {enableHighAccuracy:true, maximumAge:3000, timeout:15000}
+    );
+  }
+
+  gpsBtn.addEventListener('click', startGPS);
+
+  followBtn.addEventListener('click', ()=>{
+    follow=!follow;
+    followBtn.textContent=`עקוב אחרי המיקום: ${follow ? 'פעיל' : 'כבוי'}`;
+    if(follow && gpsMarker) map.panTo(gpsMarker.getLatLng(),{animate:true});
+  });
+
+  routeBtn.addEventListener('click', ()=>{
+    map.fitBounds(routeBounds.pad(0.12),{animate:true});
+  });
+
+  drawFallback();
+  loadWalkingRoute();
 })();
 </script>
-</body></html>
+</body>
+</html>
